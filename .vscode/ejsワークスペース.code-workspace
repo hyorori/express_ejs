@@ -10,9 +10,9 @@
     "workbench.colorTheme": "Monokai",
     "workbench.colorCustomizations": {
       // "editor.background": "#353c2a42",
-      "titleBar.activeBackground": "#89bed3",
+      "titleBar.activeBackground": "#0186bb",
       "titleBar.activeForeground": "#fff",
-      "statusBar.background": "#89bed3",
+      "statusBar.background": "#0186bb",
       "statusBar.foreground": "#fff",
       "sidebar.background": "#ff0000"
     }
