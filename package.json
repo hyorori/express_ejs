@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "npx nodemon app.js",
     "start": "npm-run-all --parallel start:*",
-    "start:nodemon": "npx nodemon app.js",
-    "start:bs": "browser-sync start --config bs-config.js"
+    "start:nodemon": "nodemon app.js",
+    "start:bs": "browser-sync start --proxy http://localhost:3333 --port 3003 --files='./**/*'",
+    "starat:bs2": "browser-sync start --proxy http://localhost:3333 --port 3003 -w 'views' "
   },
   "keywords": [],
   "author": "",

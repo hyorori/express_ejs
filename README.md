@@ -1,5 +1,17 @@
 # ejs 勉強用
 
+## pkg
+
+```
+npm ls --depth=0
+
+221118@1.0.0 D:\RHM\web\nodejs\221118
+├── browser-sync@2.27.10
+├── ejs@3.1.8
+├── express@4.18.2
+└── npm-run-all@4.1.5
+```
+
 https://kikuchance.com/2020/09/15/node-js-ejs/
 
 サンプル通りにしても「このサイトは安全に接続できません」となって表示されなかった。
@@ -77,15 +89,103 @@ http はインストール不要かつ http 通信周りの知識付けたい場
 `npm i -D ejs express`  
 両 pkg インストールしたうえで以下が最小構成
 
-# bs
+# browser-sync
+
+初期化
+
+`npx browser-sync init`
+
+```
+Config file created bs-config.js
+To use it, in the same directory run: browser-sync start --config bs-config.js
+```
+
+説明の通り、`browser-sync start --config bs-config.js` で設定ファイルを参照して bs が起動
+以下のようにコマンドにオプション与えることでも指定可能
+
+```json
+"scripts": {
+  "start:bs": "browser-sync start --proxy http://localhost:3333 --port 3003 --files='./**/*'",
+}
+```
+
+💬 `--files='./**/*'`の指定で小一時間迷った。これがないと変更を監視してくれない。
+
+- [browser sync のオプション](https://browsersync.io/docs/command-line)
 
 https://chusotsu-program.com/nodemon-browsersync/
+https://knym.net/nodemon-browsersync/
 
+---
+
+# POST リクエスト受け取る 2022-11-29 Tue
+
+## 受け取る
+
+```js
+app.use(express.urlencoded({ extended: true }));
+// * 上記がないとreq.bodyはundefinedになる
+app.post(`/uketoru`, (req, res) => {
+  console.log(`POSTリクエスト`, req.url, req.body);
+});
 ```
-npx browser-sync init
+
+## 保存する
+
+- `fs.writeFile()` を用いる
+- `fs`は`fileSystemの略`
+
+---
+
+# 推奨拡張の保存
+
+- 拡張機能ページで `>add`
+  - 保存先はワークスペース or `.vscode`配下 いずれかを選択可能。後者は複数人での共有に便利。
+  - 💬 拡張機能ページ限定のコマンドがあるの知らなかった おもろい
+
+ejs と VSCode のデフォルトフォーマッタ設定（属性改行）が相性悪かったので泣く泣く拡張を導入
+ワークスペースのみの指定にした。
+
+```json
+// (共通) settings.json
+{
+  "emmet.includeLanguages": {
+    "ejs": "html"
+  }
+}
 ```
 
-- node サーバーを proxy に指定
-- browser-sync は既存機能と被らない port で立ち上げる
+```json
+// extensions.json
+{
+  "recommendations": [
+    "digitalbrainstem.javascript-ejs-support",
+    "j69.ejs-beautify"
+  ]
+}
+```
 
-bs + node サーバー、起動と更新に恐ろしく時間かかるのは気のせいか？
+💬 本当はこんなんいれたくないよ～～…
+ejs ってオワコンじゃないよね…？今後もちゃんとアップデートされるか心配
+
+---
+
+# ejs ループ
+
+php と同じ感じで
+
+```ejs
+  <% [...Array(3)].map((v,i) => { %>
+  <input type="radio"/>
+  <%= i+1 %>
+  <% }) %>
+```
+
+---
+
+# json のデータを変更・削除
+
+json ファイルを`const json = require(【パス】)`で読み込み、`splice(),push(),pop()`などで変更可能。
+サーバー再起動するまでは、json データに行われた破壊的な変更が保持される。
+
+💬 これも面白いね。ゲームとかにはよさそうな。

@@ -2,20 +2,47 @@
 <html lang="ja">
 
 <head>
-  <meta charset="UTF-8">
-  <meta
-    http-equiv="X-UA-Compatible"
-    content="IE=edge"
-  >
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document</title>
 </head>
 
 <body>
-  <h1>testーーEjs!!!!</h1>
+  <div>
+    <form action="/uketoru" method="POST">
+      <input type="text" name="activity" value="デフォルト値" />
+      <button type="submit">送信</button>
+    </form>
+  </div>
+  <div>
+    <form action="/update" method="POST">
+      <input type="text" name="updatedActivity" value="変更値" />
+      <button type="submit">変更</button>
+    </form>
+  </div>
+  <div>
+    <form action="/delete" method="POST">
+      <%[...Array(3)].map((v,i) => { %>
+      <label>
+        <input <%= i===0 ? `checked` : `` %> type="radio" name="number" value="<%= i %>" />
+        <%= i+1 %>
+      </label>
+      <% }) %>
+      <button type="submit">削除</button>
+    </form>
+  </div>
+  <div>
+    <form action="/add" method="POST">
+      <input type="text" name="added" value="🍖">
+      <button type="submit">末尾に追加</button>
+    </form>
+  </div>
+  <%= activities.map((v) => {
+
+    return v.icon
+  }).join(``) %>
+
 </body>
 
 </html>
