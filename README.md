@@ -3,6 +3,9 @@
 ## pkg
 
 ```
+npm init -y
+npm i -D ejs express browser-sync npm-run-all
+
 npm ls --depth=0
 
 221118@1.0.0 D:\RHM\web\nodejs\221118
@@ -192,6 +195,12 @@ json ファイルを`const json = require(【パス】)`で読み込み、`splic
 
 ---
 
+# ejs 公式
+
+https://ejs.co/
+
+---
+
 # MysSql 連携
 
 - 基本コマンド https://qiita.com/knife0125/items/bb095a85d1a5d3c8f706
@@ -202,13 +211,14 @@ json ファイルを`const json = require(【パス】)`で読み込み、`splic
 のあとにパスワード。でもどうやってユーザー登録したかとかもう覚えてねーや…。
 
 ```
+
 create database dev_express_ejs
 use dev_express_ejs
 create table items
-    -> (id int,name varchar(10));
+-> (id int,name varchar(10));
 show tables
 
 insert into items values (1,'user1');
 
-select * from  `items`;
+select \* from `items`;
 ```

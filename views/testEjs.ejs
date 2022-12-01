@@ -23,7 +23,7 @@
   </div>
   <div>
     <form action="/delete" method="POST">
-      <%[...Array(3)].map((v,i) => { %>
+      <%= [...Array(3)].map((v,i) => { %>
       <label>
         <input <%= i===0 ? `checked` : `` %> type="radio" name="number" value="<%= i %>" />
         <%= i+1 %>
