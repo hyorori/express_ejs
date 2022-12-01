@@ -189,3 +189,26 @@ json ファイルを`const json = require(【パス】)`で読み込み、`splic
 サーバー再起動するまでは、json データに行われた破壊的な変更が保持される。
 
 💬 これも面白いね。ゲームとかにはよさそうな。
+
+---
+
+# MysSql 連携
+
+- 基本コマンド https://qiita.com/knife0125/items/bb095a85d1a5d3c8f706
+- データ型 https://www.javadrive.jp/mysql/type/
+
+忘れてたら思い出すの大変だろうなと思ってた mysql コマンド、覚えてるもんだね意外と
+`mysql -u root -p`
+のあとにパスワード。でもどうやってユーザー登録したかとかもう覚えてねーや…。
+
+```
+create database dev_express_ejs
+use dev_express_ejs
+create table items
+    -> (id int,name varchar(10));
+show tables
+
+insert into items values (1,'user1');
+
+select * from  `items`;
+```
