@@ -210,15 +210,118 @@ https://ejs.co/
 `mysql -u root -p`
 のあとにパスワード。でもどうやってユーザー登録したかとかもう覚えてねーや…。
 
-```
+```sql
 
 create database dev_express_ejs
 use dev_express_ejs
-create table items
--> (id int,name varchar(10));
+
+-- オートインクリメント
+create table items (id int auto_increment,name varchar(10),index(id));
+
 show tables
 
-insert into items values (1,'user1');
+insert into items values (null,'user1');
 
-select \* from `items`;
+-- nameカラムにだけ追加
+insert into items (name) values ('test1');
+
+select * from `items`;
+
+drop table items; --削除
 ```
+
+## 複数行 inset
+
+```
+insert into items values
+(0,'name1'),
+(0,'name1'),
+(0,'name1');
+```
+
+## 日本語データ登録
+
+[MySQL 5.7 文字コードを UTF8 に！日本語が登録できない！](https://server-recipe.com/1867/)
+
+```sql
+show variables like 'character%'; -- 確認用コマンド
+
+-- 1. 🍕 以下を再定義してあげる必要あり
+-- | character_set_database   | latin1 |
+-- | character_set_server     | latin1 |
+
+set character_set_database = utf8;
+set character_set_server = utf8;
+
+-- 2. 🍕 テーブルの文字コードも変更
+alter table items convert to character set utf8;
+alter table items convert to character set utf8mb4;
+
+show create table items \G; --テーブル情報表示コマンド
+```
+
+[テーブルを作成したときのコマンドを表示する (SHOW CREATE TABLE)](https://maku77.github.io/sql/show-create-table.html)
+
+💬 でもこれだと俺の大好きな絵文字 🍣 が使えないのよ
+
+## xampp mysql デフォルト文字コードを変更
+
+https://qiita.com/knowledge87sun/items/6f57b26eadcf3ca79d8c
+
+xampp の mysql 設定ファイル、多分以下
+`C:\xampp\mysql\bin\my.ini`
+
+- `[mysqld]`の末尾に `character_set_server=utf8mb4`
+
+- `[client], [mysqldump], [mysql]` 三か所それぞれの末尾に `default-character-set=utf8mb4`
+
+💬 どの記述が何に効果あるのかいまいちわかってない
+
+```sql
+set character_set_database = utf8mb4;
+```
+
+■ DB の文字コード確認用コード集
+
+```
+SELECT SCHEMA_NAME,DEFAULT_CHARACTER_SET_NAME,DEFAULT_COLLATION_NAME
+    FROM INFORMATION_SCHEMA.SCHEMATA
+    WHERE SCHEMA_NAME = 'dev_express_ejs';
+
+SELECT TABLE_NAME,TABLE_COLLATION
+    FROM INFORMATION_SCHEMA.TABLES
+    WHERE TABLE_SCHEMA='dev_express_ejs';
+```
+
+ウェブ上のデータベース使うにはまだまだ知識たりんよ
+[Express+PostgreSQL+Sequelize を Docker で構築してみる【前編】](https://qiita.com/rockguitar67/items/b644a63b3e39cc1fcaea)
+
+---
+
+# MySql オートインクリメント
+
+```sql
+create table items (id int auto_increment, name varchar(10),index(id))
+
+desc items;
+```
+
+オートインクリメント指定をしたカラムに `0` または `null` を格納すると、自動で「カラムの最大値 + 1」が割り当てられる
+
+https://www.javadrive.jp/mysql/table/index7.html
+
+> AUTO_INCREMENT が設定されたカラムには任意の値を格納できますが、 NULL または 0 を格納すると現在カラムに格納されている最大の値に 1 を加算した値を自動で格納します。
+
+💬 `index(id)`の部分がないと error  
+オートインクリメント設定するためには、その項目に別途指定がいるっぽい
+
+## ■ オートインクリメントの数値初期化
+
+```sql
+delete from items; -- 全消し
+alter table items auto_increment = 1; -- 全消し後のみ有効
+
+truncate table items;  -- もしくはtruncate
+```
+
+[TRUNCATE と DELETE の違い](http://tech.aainc.co.jp/archives/)4772
